@@ -34,7 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(color: AppColors.whiteColor, fontSize: 14),
                 ),
                 ymargin(30),
-                Container(
+                SizedBox(
                   height: 40,
                   width: double.infinity,
                   child: TextField(
