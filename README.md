@@ -1,16 +1,9 @@
-# dictionary_app
+# Riverpod Dictionary Application
 
-A new Flutter project.
+A project showcasing how Riverpod can be used to consume API's and manage the state of a mobile application.
 
-## Getting Started
+## Key Features:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Uses Riverpod.
+- Searches for words.
+- Shows meaning and usage example of selected words.
