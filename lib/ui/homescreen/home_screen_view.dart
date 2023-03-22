@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dictionary_app/ui/homescreen/home_screen_viewmodel.dart';
 import 'package:dictionary_app/core/constants/constants.dart';
+import 'package:dictionary_app/ui/word_definition_screen/word_definition_screen_view.dart';
 import 'package:dictionary_app/utils/ui_helpers/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,11 +18,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController searchWord = TextEditingController();
   bool loading = false;
 
- 
-
   @override
   Widget build(BuildContext context) {
-    final dictController = ref.read(dictionaryController(searchWord.text));
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -32,7 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Dictionary App',
+                        'Online Dictionary App',
                         style: TextStyle(
                             color: AppColors.orangeColor,
                             fontSize: 34,
@@ -46,7 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       ymargin(30),
                       SizedBox(
-                        height: 40,
+                        height: 45,
                         width: double.infinity,
                         child: TextField(
                           controller: searchWord,
@@ -66,16 +66,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       const Spacer(),
                       ElevatedButton(
-                          onPressed: () {
-                            dictController.when(
-                                data: (data) {},
-                                error: (error, _) {
+                          onPressed: () async {
+                            setState(() {
+                              loading = true;
+                            });
+                            final dc = ref.watch(dictionaryProvider);
+                            final dc2 = ref.watch(dictionaryProvider.notifier);
+                            await dc2.getWords(searchWord.text.trim());
+                            switch (dc) {
+                              case SearchState.searchSuccess:
+                                setState(() {
                                   loading = false;
-                                  UIHelpers.showAlertDialog(context, error: error, query: searchWord.text);
-                                },
-                                loading: () {
+                                });
+                                print("Data received is: ${dc2.list}");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        WordDefinitionScreen(data: dc2.list),
+                                  ),
+                                );
+                                break;
+                              case SearchState.loading:
+                                setState(() {
                                   loading = true;
                                 });
+                                break;
+                              case SearchState.hasError:
+                                setState(() {
+                                  loading = false;
+                                });
+                                UIHelpers.showAlertDialog(
+                                  context,
+                                  error: dc2.error,
+                                  query: searchWord.text,
+                                  function: () async {
+                                    Navigator.pop(context);
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    await dc2.getWords(searchWord.text.trim());
+
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  },
+                                );
+                                break;
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.all(16),
