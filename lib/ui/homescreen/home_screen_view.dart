@@ -96,8 +96,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 setState(() {
                                   loading = false;
                                 });
-                                UIHelpers.showAlertDialog(context,
-                                    error: dc2.error, query: searchWord.text);
+                                UIHelpers.showAlertDialog(
+                                  context,
+                                  error: dc2.error,
+                                  query: searchWord.text,
+                                  function: () async {
+                                    Navigator.pop(context);
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    await dc2.getWords(searchWord.text.trim());
+
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  },
+                                );
                                 break;
                             }
                           },

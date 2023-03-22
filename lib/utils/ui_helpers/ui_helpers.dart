@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UIHelpers {
   static Future<dynamic> showAlertDialog(BuildContext context,
-      {required Object error, String? query}) {
+      {required Object error, String? query, VoidCallback? function}) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -73,6 +73,7 @@ class UIHelpers {
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.all(16),
                             backgroundColor: AppColors.orangeColor),
+                        onPressed: function,
                         child: Text(
                           'Try Again',
                           style: TextStyle(
@@ -80,10 +81,6 @@ class UIHelpers {
                             fontSize: 18,
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          ref.read(dictionaryController(query!));
-                        },
                       );
                     }),
                   ),
