@@ -21,9 +21,9 @@ class _WordDefinitionScreenState extends ConsumerState<WordDefinitionScreen> {
           title: Text(
             "Word Definition",
             style: TextStyle(
-                color: AppColors.orangeColor,
-                fontSize: 20,
-                fontWeight: FontWeight.normal),
+                color: AppColors.whiteColor,
+                fontSize: 28,
+                fontWeight: FontWeight.bold),
           ),
         ),
         backgroundColor: AppColors.backgroundColor,
@@ -34,23 +34,23 @@ class _WordDefinitionScreenState extends ConsumerState<WordDefinitionScreen> {
             children: [
               ...List.generate(widget.data.length, (index) {
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      widget.data[index].word ?? "",
+                      "${widget.data[index].word?.toUpperCase()} ${index == 0 ? "" : index}",
                       style: TextStyle(
                           color: AppColors.whiteColor,
                           fontSize: 34,
                           fontWeight: FontWeight.bold),
                     ),
-                    ymargin(5),
+                    ymargin(10),
                     if (widget.data[index].meanings != null &&
                         widget.data[index].meanings!.isNotEmpty)
                       ...List.generate(widget.data[index].meanings!.length,
                           (index1) {
                         return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             if (widget.data[index].meanings![index1]
@@ -64,24 +64,38 @@ class _WordDefinitionScreenState extends ConsumerState<WordDefinitionScreen> {
                                 (index2) {
                                   final definition = widget.data[index]
                                       .meanings![index1].definitions;
-                                  return Wrap(spacing: 1, children: [
-                                    Text(
-                                      "Definition: ",
-                                      style: TextStyle(
-                                          color: AppColors.whiteColor,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      definition![index2].definition ?? "",
-                                      style: TextStyle(
-                                          color: AppColors.whiteColor,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ]);
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                          textAlign: TextAlign.justify,
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: "Definition: ",
+                                              style: TextStyle(
+                                                  color: AppColors.whiteColor,
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                            TextSpan(
+                                              text: definition![index2]
+                                                      .definition ??
+                                                  "",
+                                              style: TextStyle(
+                                                  color: AppColors.orangeColor,
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ])),
+                                      ymargin(10)
+                                    ],
+                                  );
                                 },
                               ),
+                            ymargin(40),
                           ],
                         );
                       })

@@ -6,6 +6,8 @@ import 'package:get_it/get_it.dart';
 final locator = GetIt.instance;
 
 void setupLocator() {
-  locator.registerFactory<INetworkService>(NetworkService.new);
-  locator.registerLazySingleton<DictionaryRepository>(DictionaryRepository.new);
+  locator.registerFactory<INetworkService>(() => NetworkService(),
+      instanceName: "instance");
+
+  locator.registerLazySingleton<DictionaryService>(DictionaryService.new);
 }
